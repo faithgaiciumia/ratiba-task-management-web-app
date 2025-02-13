@@ -82,7 +82,7 @@ export default function NewTaskForm() {
             <option value={"doing"}>Doing</option>
           </Select>
         </FormControl>
-        <Button my={2} w={"100%"} type="submit" borderRadius={"3xl"}>
+        <Button my={2} w={"100%"} type="submit" borderRadius={"3xl"} colorScheme="blue">
           Create Task
         </Button>
       </form>

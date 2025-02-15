@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Divider,
   FormControl,
   FormLabel,
   Heading,
@@ -12,11 +13,10 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import useTaskStore from "../data/useTaskStore";
-import { FaPlus } from "react-icons/fa";
+import { FaCalendar, FaPlus } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 export default function Sidebar() {
@@ -27,28 +27,42 @@ export default function Sidebar() {
     addBoard({ boardID: uuidv4(), boardName: data.boardName });
   };
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <Box
-      backgroundColor={"gray.700"}
-      color={"white"}
-      borderRight={"1px solid gray"}
-      py={4}
-      pr={4}
+      backgroundColor={"white"}
+      boxShadow={"lg"}
+      p={4}
       w={"25%"}
       h={"100vh"}
+      display={{ base: "none", md: "block" }}
     >
-      <Heading fontSize={"lg"} mx={4}>
+      <Button
+        fontSize={"lg"}
+        fontFamily={"Monomakh, serif"}
+        variant={"ghost"}
+        leftIcon={<FaCalendar />}
+      >
         ratiba
-      </Heading>
+      </Button>
+      <Divider borderColor={"gray.500"} my={4} w={"100%"} />
       <Box my={12}>
-        <Text mx={4}>All boards ({boards.length})</Text>
+        <Heading
+          fontSize={"sm"}
+          textTransform={"capitalize"}
+          fontFamily={"'Atkinson Hyperlegible Next', serif"}
+        >
+          All boards ({boards.length})
+        </Heading>
+        <Divider borderColor={"gray.500"} my={2} />
         {boards.map((board) => (
           <Link key={board.boardID}>
             <Box
-              backgroundColor={"blue.400"}
               my={4}
               p={2}
               borderRightRadius={"3xl"}
+              textTransform={"capitalize"}
+              fontFamily={"'Atkinson Hyperlegible Mono', serif"}
             >
               {board.boardName}
             </Box>
@@ -57,15 +71,16 @@ export default function Sidebar() {
         <Button
           leftIcon={<FaPlus />}
           colorScheme="blue"
-          variant={"ghost"}
+          variant={"outline"}
           my={4}
           onClick={onOpen}
+          fontFamily={"'Atkinson Hyperlegible Next', serif"}
         >
           Create new board
         </Button>
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
-          <ModalContent backgroundColor={"gray.600"} color={"white"}>
+          <ModalContent>
             <ModalHeader>Add new board</ModalHeader>
             <ModalCloseButton />
             <ModalBody>

@@ -5,40 +5,86 @@ import {
   Flex,
   Heading,
   IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  useBreakpointValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import { FaEllipsisV, FaPlus } from "react-icons/fa";
 import NewTaskForm from "./NewTaskForm";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 
-export default function TopNav({boardName, boardID}) {
+export default function TopNav({ boardName, boardID }) {
   const { onOpen, isOpen, onClose } = useDisclosure();
+  const isSmallScreen = useBreakpointValue({ base: true, md: false });
   return (
-    <Box backgroundColor={"gray.700"} p={4} color={"white"} borderBottom={"1px solid gray"} w={"100%"}>
+    <Box
+      backgroundColor={"white"}
+      p={2}
+      boxShadow={"lg"}
+      m={2}
+      borderRadius={"md"}
+      fontFamily={"'Atkinson Hyperlegible Next', serif"}
+    >
       <Flex justify={"space-between"} align={"center"}>
-        <Heading fontSize={"lg"} textTransform={"capitalize"}>{boardName}</Heading>
+        {isSmallScreen ? (
+          <Menu>
+            <MenuButton
+              as={Button}
+              rightIcon={<ChevronDownIcon />}
+              variant={"ghost"}
+              textTransform={"capitalize"}
+              fontWeight={"700"}
+            >
+              {boardName}{" "}
+            </MenuButton>
+            <MenuList>
+              <MenuItem>Link 1</MenuItem>
+            </MenuList>
+          </Menu>
+        ) : (
+          <Heading fontSize={"lg"} textTransform={"capitalize"}>
+            {boardName}
+          </Heading>
+        )}
+
         <Flex align={"center"}>
-          <Button
-            colorScheme="blue"
-            borderRadius={"3xl"}
-            size={"sm"}
-            leftIcon={<FaPlus />}
-            onClick={onOpen}
-          >
-            add new task
-          </Button>
+          {isSmallScreen ? (
+            <IconButton
+              colorScheme="blue"
+              borderRadius={"3xl"}
+              size={"sm"}
+              onClick={onOpen}
+            >
+              <FaPlus />
+            </IconButton>
+          ) : (
+            <Button
+              colorScheme="blue"
+              borderRadius={"3xl"}
+              size={"sm"}
+              leftIcon={<FaPlus />}
+              onClick={onOpen}
+              textTransform={"capitalize"}
+            >
+              add new task
+            </Button>
+          )}
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent backgroundColor={"gray.600"} color={"white"}>
+            <ModalContent>
               <ModalHeader>Add new task</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                <NewTaskForm boardID={boardID}/>
+                <NewTaskForm boardID={boardID} />
               </ModalBody>
             </ModalContent>
           </Modal>

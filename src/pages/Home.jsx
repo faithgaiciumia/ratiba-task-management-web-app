@@ -8,10 +8,10 @@ export default function Home() {
   const boards = useTaskStore((state) => state.boards);
   const navigate = useNavigate();
   return (
-    <Box backgroundColor={"gray.900"} minH={"100vh"}>
+    <Box backgroundColor={"blue.100"} minH={"100vh"}>
       <Flex>
         <Sidebar />
-        <Box w={"100%"}>
+        <Box w={"75%"}>
           <TopNav />
           <Flex justify={"center"} align={"center"} p={4}>
             <Heading fontSize={"md"} color={"white"}>

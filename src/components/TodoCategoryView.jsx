@@ -1,16 +1,17 @@
 /* eslint-disable react/prop-types */
-import { Box, Heading, VStack } from "@chakra-ui/react";
+import { Box, Button, VStack } from "@chakra-ui/react";
 import TaskDisplayCard from "./TaskDisplayCard";
+import { FaCircle } from "react-icons/fa";
 
 export default function TodoCategoryView({ todoTasks }) {
   return (
-    <Box>
-      <Heading color={"white"} fontSize={"md"}>
+    <Box minW={"30%"}>
+      <Button size={"md"} leftIcon={<FaCircle color="teal" />} variant={"ghost"} fontFamily={"'Atkinson Hyperlegible Next', serif"}>
         TODO ({todoTasks.length})
-      </Heading>
+      </Button>
       <VStack>
         {todoTasks.map((task) => (
-          <TaskDisplayCard key={task.taskTitle} />
+          <TaskDisplayCard key={task.taskTitle} taskTitle={task.taskTitle} />
         ))}
       </VStack>
     </Box>

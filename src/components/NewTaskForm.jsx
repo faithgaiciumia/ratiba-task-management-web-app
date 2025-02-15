@@ -73,6 +73,9 @@ export default function NewTaskForm({ boardID }) {
           w={"100%"}
           borderRadius={"3xl"}
           onClick={() => append({ name: "" })}
+          variant={"outline"}
+          colorScheme="blue"
+          fontFamily={"'Atkinson Hyperlegible Next', serif"}
         >
           Add New Subtask
         </Button>
@@ -90,6 +93,7 @@ export default function NewTaskForm({ boardID }) {
           type="submit"
           borderRadius={"3xl"}
           colorScheme="blue"
+          fontFamily={"'Atkinson Hyperlegible Next', serif"}
         >
           Create Task
         </Button>

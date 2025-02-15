@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import {
   Button,
   Flex,
@@ -11,7 +12,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { FaPlus, FaTimes } from "react-icons/fa";
 import useTaskStore from "../data/useTaskStore";
 
-export default function NewTaskForm() {
+export default function NewTaskForm({ boardID }) {
   const { register, handleSubmit, control } = useForm({
     defaultValues: {
       taskStatus: "todo",
@@ -31,6 +32,7 @@ export default function NewTaskForm() {
       taskDescription: data.taskDescription,
       taskSubTasks: data.taskSubTasks,
       taskStatus: data.taskStatus,
+      boardID: boardID,
     });
   };
   return (
@@ -82,7 +84,13 @@ export default function NewTaskForm() {
             <option value={"doing"}>Doing</option>
           </Select>
         </FormControl>
-        <Button my={2} w={"100%"} type="submit" borderRadius={"3xl"} colorScheme="blue">
+        <Button
+          my={2}
+          w={"100%"}
+          type="submit"
+          borderRadius={"3xl"}
+          colorScheme="blue"
+        >
           Create Task
         </Button>
       </form>

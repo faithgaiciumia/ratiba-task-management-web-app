@@ -1,10 +1,14 @@
+/* eslint-disable react/prop-types */
 import { Box, Heading, VStack } from "@chakra-ui/react";
 import TaskDisplayCard from "./TaskDisplayCard";
 
-export default function CategoryView() {
+export default function DoneCategoryView({ doneTasks }) {
+  console.log("done", doneTasks);
   return (
     <Box>
-      <Heading color={"white"} fontSize={'md'}>TODO (4)</Heading>
+      <Heading color={"white"} fontSize={"md"}>
+        TODO (4)
+      </Heading>
       <VStack>
         <TaskDisplayCard />
         <TaskDisplayCard />

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import {
   Box,
   Button,
@@ -15,12 +16,12 @@ import {
 import { FaEllipsisV, FaPlus } from "react-icons/fa";
 import NewTaskForm from "./NewTaskForm";
 
-export default function TopNav() {
+export default function TopNav({boardName, boardID}) {
   const { onOpen, isOpen, onClose } = useDisclosure();
   return (
-    <Box backgroundColor={"gray.700"} p={4} color={"white"}>
+    <Box backgroundColor={"gray.700"} p={4} color={"white"} borderBottom={"1px solid gray"} w={"100%"}>
       <Flex justify={"space-between"} align={"center"}>
-        <Heading fontSize={"lg"}>Platform Launch</Heading>
+        <Heading fontSize={"lg"} textTransform={"capitalize"}>{boardName}</Heading>
         <Flex align={"center"}>
           <Button
             colorScheme="blue"
@@ -37,7 +38,7 @@ export default function TopNav() {
               <ModalHeader>Add new task</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                <NewTaskForm />
+                <NewTaskForm boardID={boardID}/>
               </ModalBody>
             </ModalContent>
           </Modal>

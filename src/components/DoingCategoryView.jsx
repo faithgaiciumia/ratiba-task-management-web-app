@@ -2,18 +2,16 @@
 import { Box, Heading, VStack } from "@chakra-ui/react";
 import TaskDisplayCard from "./TaskDisplayCard";
 
-export default function DoingCategoryView({doingTasks}) {
-  console.log("doing", doingTasks);
+export default function DoingCategoryView({ doingTasks }) {
   return (
     <Box>
       <Heading color={"white"} fontSize={"md"}>
-        TODO (4)
+        Doing ({doingTasks.length})
       </Heading>
       <VStack>
-        <TaskDisplayCard />
-        <TaskDisplayCard />
-        <TaskDisplayCard />
-        <TaskDisplayCard />
+        {doingTasks.map((task) => (
+          <TaskDisplayCard key={task.taskTitle} />
+        ))}
       </VStack>
     </Box>
   );

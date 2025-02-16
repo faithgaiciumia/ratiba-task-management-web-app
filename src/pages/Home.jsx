@@ -3,9 +3,15 @@ import Sidebar from "../components/Sidebar";
 import TopNav from "../components/TopNav";
 import useTaskStore from "../data/useTaskStore";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function Home() {
+  //get all boards
+  const fetchBoards = useTaskStore((state) => state.fetchBoards);
   const boards = useTaskStore((state) => state.boards);
+  useEffect(() => {
+    fetchBoards();
+  }, [fetchBoards]);
   const navigate = useNavigate();
   return (
     <Box backgroundColor={"blue.100"} minH={"100vh"}>

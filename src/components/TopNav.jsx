@@ -18,13 +18,15 @@ import {
   useBreakpointValue,
   useDisclosure,
 } from "@chakra-ui/react";
-import { FaEllipsisV, FaPlus } from "react-icons/fa";
+import { FaEllipsisV, FaPlus, FaTrash } from "react-icons/fa";
 import NewTaskForm from "./NewTaskForm";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import useTaskStore from "../data/useTaskStore";
 
 export default function TopNav({ boardName, boardID }) {
   const { onOpen, isOpen, onClose } = useDisclosure();
   const isSmallScreen = useBreakpointValue({ base: true, md: false });
+  const clearTasks = useTaskStore((state) => state.clearTasks);
   return (
     <Box
       backgroundColor={"white"}
@@ -88,13 +90,26 @@ export default function TopNav({ boardName, boardID }) {
               </ModalBody>
             </ModalContent>
           </Modal>
-          <IconButton
-            aria-label="extra-menu"
-            variant={"ghost"}
-            colorScheme="white"
-          >
-            <FaEllipsisV />
-          </IconButton>
+
+          <Menu>
+            <MenuButton
+              as={IconButton}
+              icon={<FaEllipsisV />}
+              variant={"ghost"}
+            />
+            <MenuList>
+              <MenuItem>
+                <Button
+                  colorScheme="red"
+                  leftIcon={<FaTrash />}
+                  w={"100%"}
+                  onClick={clearTasks}
+                >
+                  Clear Tasks
+                </Button>
+              </MenuItem>
+            </MenuList>
+          </Menu>
         </Flex>
       </Flex>
     </Box>

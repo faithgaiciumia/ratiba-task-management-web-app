@@ -18,5 +18,10 @@ const useTaskStore = create((set, get) => ({
   getTaskByBoardId: (boardID) => {
     return get().tasks.filter((task) => task.boardID === boardID);
   },
+  clearTasks: () =>
+    set(() => {
+      localStorage.removeItem("tasks");
+      return { tasks: [] };
+    }),
 }));
 export default useTaskStore;

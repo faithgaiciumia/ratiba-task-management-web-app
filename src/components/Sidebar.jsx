@@ -2,21 +2,28 @@ import {
   Box,
   Button,
   Divider,
+  Flex,
   FormControl,
   FormLabel,
   Heading,
+  IconButton,
   Input,
   Link,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import useTaskStore from "../data/useTaskStore";
-import { FaCalendar, FaPlus } from "react-icons/fa";
+import { FaCalendar, FaEllipsisH, FaPlus, FaTrash } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 export default function Sidebar() {
@@ -57,15 +64,39 @@ export default function Sidebar() {
         <Divider borderColor={"gray.500"} my={2} />
         {boards.map((board) => (
           <Link key={board.boardID}>
-            <Box
+            <Flex
               my={4}
               p={2}
               borderRightRadius={"3xl"}
-              textTransform={"capitalize"}
-              fontFamily={"'Atkinson Hyperlegible Mono', serif"}
+              align={"center"}
+              justify={"space-between"}
             >
-              {board.boardName}
-            </Box>
+              <Text
+                textTransform={"capitalize"}
+                fontFamily={"'Atkinson Hyperlegible Mono', serif"}
+              >
+                {board.boardName}
+              </Text>{" "}
+              <Menu>
+                <MenuButton
+                  as={IconButton}
+                  icon={<FaEllipsisH />}
+                  variant={"ghost"}
+                />
+                <MenuList>
+                  <MenuItem>
+                    <Button
+                      colorScheme="red"
+                      leftIcon={<FaTrash />}
+                      w={"100%"}
+                      size={"sm"}
+                    >
+                      Delete Board
+                    </Button>
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            </Flex>
           </Link>
         ))}
         <Button

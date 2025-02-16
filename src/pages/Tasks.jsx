@@ -20,7 +20,7 @@ export default function Tasks() {
         <Sidebar />
         <Box w={"100%"}>
           <TopNav boardName={boardName} boardID={boardID} />
-          <Flex gap={6} my={4} p={4}>
+          <Flex gap={6} my={4} p={4} overflowX={"auto"}>
             <TodoCategoryView todoTasks={todoTasks} />            
             <DoingCategoryView doingTasks={doingTasks} />
             <DoneCategoryView doneTasks={doneTasks} />

@@ -21,6 +21,7 @@ import {
   Text,
   Link,
   useDisclosure,
+  Spinner,
 } from "@chakra-ui/react";
 import useTaskStore from "../data/useTaskStore";
 import { FaCalendar, FaEllipsisH, FaPlus, FaTrash } from "react-icons/fa";
@@ -33,6 +34,7 @@ export default function Sidebar() {
   //get all boards
   const fetchBoards = useTaskStore((state) => state.fetchBoards);
   const boards = useTaskStore((state) => state.boards);
+  const loadingBoards = useTaskStore((state)=>state.loadingBoards);
   useEffect(() => {
     fetchBoards();
   }, [fetchBoards]);
@@ -73,16 +75,19 @@ export default function Sidebar() {
       h={"100%"}
       display={{ base: "none", md: "block" }}
     >
+      
       <Button
         fontSize={"lg"}
         fontFamily={"Monomakh, serif"}
         variant={"ghost"}
         leftIcon={<FaCalendar />}
+        onClick={() => navigate("/")}
       >
         ratiba
       </Button>
       <Divider borderColor={"gray.500"} my={4} w={"100%"} />
       <Box my={12}>
+      
         <Heading
           fontSize={"sm"}
           textTransform={"capitalize"}
@@ -92,6 +97,7 @@ export default function Sidebar() {
         </Heading>
         <Divider borderColor={"gray.500"} my={2} />
         <Box maxH={"60vh"} overflowY={"auto"}>
+        {loadingBoards&&(<Spinner size={"lg"} color={"blue"}/>)}
           {boards.map((board) => (
             <Link
               key={board._id}

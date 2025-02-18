@@ -3,8 +3,10 @@ import axios from "axios";
 
 const URL = "http://localhost:4000/graphql";
 const useTaskStore = create((set) => ({
+  loadingBoards: false,
   boards: [],
   fetchBoards: async () => {
+    set({ loadingBoards: true });
     try {
       const response = await axios.post(
         URL,
@@ -27,6 +29,8 @@ const useTaskStore = create((set) => ({
       set({ boards: response.data.data.getBoards });
     } catch (error) {
       console.error("error fetching boards", error);
+    } finally {
+      set({ loadingBoards: false });
     }
   },
   addBoard: async (newBoard) => {
@@ -52,13 +56,15 @@ const useTaskStore = create((set) => ({
           },
         }
       );
-      console.log("added board", response.data.data.newBoard);
+      // console.log("added board", response.data.data.newBoard);
       return response.data.data.newBoard;
     } catch (error) {
       console.error("error adding board", error);
     }
   },
+
   tasks: [],
+  loadingTasks: false,
   addTask: async (newTask) => {
     try {
       const response = await axios.post(
@@ -95,6 +101,7 @@ const useTaskStore = create((set) => ({
   },
 
   getBoardTasks: async () => {
+    set({ loadingTasks: true });
     try {
       const response = await axios.post(
         URL,
@@ -122,6 +129,8 @@ const useTaskStore = create((set) => ({
       set({ tasks: response.data.data.getBoardTasks });
     } catch (error) {
       console.error("error fetching tasks", error);
+    } finally {
+      set({ loadingTasks: false });
     }
   },
   clearTasks: () =>

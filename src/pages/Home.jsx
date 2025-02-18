@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, Spinner, Text } from "@chakra-ui/react";
 import Sidebar from "../components/Sidebar";
 import useTaskStore from "../data/useTaskStore";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import { useEffect } from "react";
 export default function Home() {
   //get all boards
   const fetchBoards = useTaskStore((state) => state.fetchBoards);
+  const loadingBoards = useTaskStore((state)=>state.loadingBoards);
   const boards = useTaskStore((state) => state.boards);
   useEffect(() => {
     fetchBoards();
@@ -42,7 +43,8 @@ export default function Home() {
               All Boards
             </Heading>
           </Flex>
-          <Flex p={4} gap={6}>
+          <Flex p={4} gap={6} flexWrap={"wrap"}>
+            {loadingBoards&&(<Spinner size={"lg"} color={"blue"}/>)}
             {boards.map((board) => (
               <Box
                 key={board.id}

@@ -16,7 +16,11 @@ export default function TodoCategoryView({ todoTasks }) {
       </Button>
       <VStack>
         {todoTasks.map((task) => (
-          <TaskDisplayCard key={task._id} taskTitle={task.taskName} />
+          <TaskDisplayCard
+            key={task._id}
+            taskTitle={task.taskName}
+            subTasks={task.taskSubTasks}
+          />
         ))}
       </VStack>
     </Box>

@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Box, Heading, Text } from "@chakra-ui/react";
 
-export default function TaskDisplayCard({ taskTitle }) {
+export default function TaskDisplayCard({ taskTitle, subTasks }) {
   return (
     <Box
       backgroundColor={"white"}
@@ -19,7 +19,7 @@ export default function TaskDisplayCard({ taskTitle }) {
           {taskTitle}
         </Heading>
         <Text fontSize={"sm"} my={2}>
-          0 of 3 subtasks
+          0 of {subTasks.length} subtasks
         </Text>
       </Box>
     </Box>

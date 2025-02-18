@@ -86,7 +86,7 @@ export default function TopNav({ boardName, boardID }) {
               <ModalHeader>Add new task</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                <NewTaskForm boardID={boardID} />
+                <NewTaskForm boardID={boardID} onClose={onClose} />
               </ModalBody>
             </ModalContent>
           </Modal>

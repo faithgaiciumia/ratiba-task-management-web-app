@@ -16,7 +16,11 @@ export default function DoingCategoryView({ doingTasks }) {
       </Button>
       <VStack>
         {doingTasks.map((task) => (
-          <TaskDisplayCard key={task.taskTitle} taskTitle={task.taskTitle} />
+          <TaskDisplayCard
+            key={task._id}
+            taskTitle={task.taskName}
+            subTasks={task.taskSubTasks}
+          />
         ))}
       </VStack>
     </Box>

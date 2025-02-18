@@ -7,12 +7,14 @@ import {
   IconButton,
   Input,
   Select,
+  useToast,
 } from "@chakra-ui/react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { FaPlus, FaTimes } from "react-icons/fa";
 import useTaskStore from "../data/useTaskStore";
+import { useState } from "react";
 
-export default function NewTaskForm({ boardID }) {
+export default function NewTaskForm({ boardID, onClose }) {
   const { register, handleSubmit, control } = useForm({
     defaultValues: {
       taskStatus: "todo",
@@ -25,15 +27,34 @@ export default function NewTaskForm({ boardID }) {
   });
   const addTask = useTaskStore((state) => state.addTask);
 
-  const onSubmit = (data) => {
-    console.log(data);
-    addTask({
-      taskName: data.taskTitle,
-      taskDescription: data.taskDescription,
-      taskSubTasks: data.taskSubTasks,
-      taskStatus: data.taskStatus,
-      boardID: boardID,
-    });
+  const [loading, setLoading] = useState();
+
+  const toast = useToast();
+
+  const onSubmit = async (data) => {
+    try {
+      setLoading(true);
+      const addedTask = await addTask({
+        taskName: data.taskTitle,
+        taskDescription: data.taskDescription,
+        taskSubTasks: data.taskSubTasks,
+        taskStatus: data.taskStatus,
+        boardID: boardID,
+      });
+      if (addedTask) {
+        toast({
+          title: "Task created.",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+        onClose();
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <>
@@ -82,7 +103,7 @@ export default function NewTaskForm({ boardID }) {
         <FormControl my={2}>
           <FormLabel>Status</FormLabel>
           <Select {...register("taskStatus")}>
-            <option value={"todo"}>TODO</option>
+            <option value={"TODO"}>TODO</option>
             <option value={"done"}>Done</option>
             <option value={"doing"}>Doing</option>
           </Select>
@@ -94,6 +115,8 @@ export default function NewTaskForm({ boardID }) {
           borderRadius={"3xl"}
           colorScheme="blue"
           fontFamily={"'Atkinson Hyperlegible Next', serif"}
+          isLoading={loading}
+          loadingText="Loading..."
         >
           Create Task
         </Button>

@@ -14,11 +14,12 @@ export default function Tasks() {
 
   //get all tasks
   const getBoardTasks = useTaskStore((state) => state.getBoardTasks);
-  const loadingTasks = useTaskStore((state)=>state.loadingTasks);
+  const loadingTasks = useTaskStore((state) => state.loadingTasks);
+  const tasks = useTaskStore((state) => state.tasks);
   useEffect(() => {
     getBoardTasks();
   }, [getBoardTasks]);
-  const tasks = useTaskStore((state) => state.tasks);
+
   //filter only for a single board
   const currentBoardTasks = tasks.filter((task) => task.boardID === id);
 
@@ -38,7 +39,11 @@ export default function Tasks() {
         <Sidebar />
         <Box w={"100%"}>
           <TopNav boardName={boardName} boardID={id} />
-          {loadingTasks&&(<Flex justify={"center"} align={"center"}><Spinner size={"lg"} color={"blue"}/></Flex>)}
+          {loadingTasks && (
+            <Flex justify={"center"} align={"center"}>
+              <Spinner size={"lg"} color={"blue"} />
+            </Flex>
+          )}
           {currentBoardTasks.length > 0 ? (
             <Flex gap={6} my={4} p={4} overflowX={"auto"}>
               <TodoCategoryView todoTasks={todoTasks} />

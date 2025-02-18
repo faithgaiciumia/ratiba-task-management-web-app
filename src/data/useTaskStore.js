@@ -85,7 +85,7 @@ const useTaskStore = create((set) => ({
                     }
                   }`,
           variables: {
-            input: newTask,
+            record: newTask,
           },
         },
         {
@@ -95,6 +95,7 @@ const useTaskStore = create((set) => ({
         }
       );
       console.log("added task", response.data);
+      return response.data.data.addTask.record;
     } catch (error) {
       console.error("error adding new task", error);
     }

@@ -29,12 +29,35 @@ const useTaskStore = create((set) => ({
       console.error("error fetching boards", error);
     }
   },
-  addBoard: (newBoard) =>
-    set((state) => {
-      const updatedBoards = [...state.boards, newBoard];
-      localStorage.setItem("boards", JSON.stringify(updatedBoards)); // Save to local storage
-      return { boards: updatedBoards };
-    }),
+  addBoard: async (newBoard) => {
+    try {
+      const response = await axios.post(
+        URL,
+        {
+          query: `mutation Mutation($record: CreateOneBoardInput!) {
+                    newBoard(record: $record) {
+                      record {
+                        boardName
+                      }
+                      recordId
+                    }
+                  }`,
+          variables: {
+            record: newBoard,
+          },
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("added board", response.data.data.newBoard);
+      return response.data.data.newBoard;
+    } catch (error) {
+      console.error("error adding board", error);
+    }
+  },
   tasks: [],
   addTask: async (newTask) => {
     try {

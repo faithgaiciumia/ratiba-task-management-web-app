@@ -25,10 +25,11 @@ import {
 import useTaskStore from "../data/useTaskStore";
 import { FaCalendar, FaEllipsisH, FaPlus, FaTrash } from "react-icons/fa";
 import { useForm } from "react-hook-form";
-import { v4 as uuidv4 } from "uuid";
-import { useEffect } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 export default function Sidebar() {
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   //get all boards
   const fetchBoards = useTaskStore((state) => state.fetchBoards);
   const boards = useTaskStore((state) => state.boards);
@@ -36,11 +37,26 @@ export default function Sidebar() {
     fetchBoards();
   }, [fetchBoards]);
 
-  //add a new board
+  //add a new board and navigate to its new page
   const addBoard = useTaskStore((state) => state.addBoard);
   const { handleSubmit, register } = useForm();
-  const onSubmit = (data) => {
-    addBoard({ boardID: uuidv4(), boardName: data.boardName });
+  const onSubmit = async (data) => {
+    setLoading(true);
+    try {
+      const addedBoard = await addBoard({ boardName: data.boardName });
+      if (addedBoard) {
+        navigate(
+          `/tasks/${addedBoard.recordId}/${encodeURIComponent(
+            addedBoard.record.boardName
+          )}`
+        );
+      }
+    } catch (error) {
+      console.error("error adding new board", error);
+    } finally {
+      setLoading(false);
+      onClose();
+    }
   };
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -53,7 +69,8 @@ export default function Sidebar() {
       boxShadow={"lg"}
       p={4}
       w={"25%"}
-      h={"100vh"}
+      minH={"100vh"}
+      h={"100%"}
       display={{ base: "none", md: "block" }}
     >
       <Button
@@ -74,65 +91,69 @@ export default function Sidebar() {
           All boards ({boards.length})
         </Heading>
         <Divider borderColor={"gray.500"} my={2} />
-        {boards.map((board) => (
-          <Link
-            key={board._id}
-            as={NavLink}
-            to={`/tasks/${board._id}/${encodeURIComponent(board.boardName)}`}
-            color={
-              location.pathname ===
-              `/tasks/${board._id}/${encodeURIComponent(board.boardName)}`
-                ? "blue"
-                : "black"
-            }
-            fontWeight={
-              location.pathname ===
-              `/tasks/${board._id}/${encodeURIComponent(board.boardName)}`
-                ? "bold"
-                : "normal"
-            }
-          >
-            <Flex
-              my={4}
-              p={2}
-              borderRightRadius={"3xl"}
-              align={"center"}
-              justify={"space-between"}
+        <Box maxH={"60vh"} overflowY={"auto"}>
+          {boards.map((board) => (
+            <Link
+              key={board._id}
+              as={NavLink}
+              to={`/tasks/${board._id}/${encodeURIComponent(board.boardName)}`}
+              color={
+                location.pathname ===
+                `/tasks/${board._id}/${encodeURIComponent(board.boardName)}`
+                  ? "blue"
+                  : "black"
+              }
+              fontWeight={
+                location.pathname ===
+                `/tasks/${board._id}/${encodeURIComponent(board.boardName)}`
+                  ? "bold"
+                  : "normal"
+              }
             >
-              <Text
-                textTransform={"capitalize"}
-                fontFamily={"'Atkinson Hyperlegible Mono', serif"}
+              <Flex
+                my={4}
+                p={2}
+                borderRightRadius={"3xl"}
+                align={"center"}
+                justify={"space-between"}
               >
-                {board.boardName}
-              </Text>{" "}
-              <Menu>
-                <MenuButton
-                  as={IconButton}
-                  icon={<FaEllipsisH />}
-                  variant={"ghost"}
-                  color={
-                    location.pathname ===
-                    `/tasks/${board._id}/${encodeURIComponent(board.boardName)}`
-                      ? "blue"
-                      : "black"
-                  }
-                />
-                <MenuList>
-                  <MenuItem>
-                    <Button
-                      colorScheme="red"
-                      leftIcon={<FaTrash />}
-                      w={"100%"}
-                      size={"sm"}
-                    >
-                      Delete Board
-                    </Button>
-                  </MenuItem>
-                </MenuList>
-              </Menu>
-            </Flex>
-          </Link>
-        ))}
+                <Text
+                  textTransform={"capitalize"}
+                  fontFamily={"'Atkinson Hyperlegible Mono', serif"}
+                >
+                  {board.boardName}
+                </Text>{" "}
+                <Menu>
+                  <MenuButton
+                    as={IconButton}
+                    icon={<FaEllipsisH />}
+                    variant={"ghost"}
+                    color={
+                      location.pathname ===
+                      `/tasks/${board._id}/${encodeURIComponent(
+                        board.boardName
+                      )}`
+                        ? "blue"
+                        : "black"
+                    }
+                  />
+                  <MenuList>
+                    <MenuItem>
+                      <Button
+                        colorScheme="red"
+                        leftIcon={<FaTrash />}
+                        w={"100%"}
+                        size={"sm"}
+                      >
+                        Delete Board
+                      </Button>
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+              </Flex>
+            </Link>
+          ))}
+        </Box>
         <Button
           leftIcon={<FaPlus />}
           colorScheme="blue"
@@ -163,6 +184,8 @@ export default function Sidebar() {
                   borderRadius={"3xl"}
                   w={"100%"}
                   my={4}
+                  isLoading={loading}
+                  loadingText="Creating..."
                 >
                   Create board
                 </Button>

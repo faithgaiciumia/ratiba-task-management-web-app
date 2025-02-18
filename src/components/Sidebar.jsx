@@ -8,7 +8,6 @@ import {
   Heading,
   IconButton,
   Input,
-  Link,
   Menu,
   MenuButton,
   MenuItem,
@@ -20,6 +19,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  Link,
   useDisclosure,
 } from "@chakra-ui/react";
 import useTaskStore from "../data/useTaskStore";
@@ -27,6 +27,7 @@ import { FaCalendar, FaEllipsisH, FaPlus, FaTrash } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import { useEffect } from "react";
+import { NavLink, useLocation } from "react-router-dom";
 export default function Sidebar() {
   //get all boards
   const fetchBoards = useTaskStore((state) => state.fetchBoards);
@@ -42,6 +43,9 @@ export default function Sidebar() {
     addBoard({ boardID: uuidv4(), boardName: data.boardName });
   };
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  //manage active and inactive links
+  const location = useLocation();
 
   return (
     <Box
@@ -71,7 +75,23 @@ export default function Sidebar() {
         </Heading>
         <Divider borderColor={"gray.500"} my={2} />
         {boards.map((board) => (
-          <Link key={board.boardID}>
+          <Link
+            key={board._id}
+            as={NavLink}
+            to={`/tasks/${board._id}/${encodeURIComponent(board.boardName)}`}
+            color={
+              location.pathname ===
+              `/tasks/${board._id}/${encodeURIComponent(board.boardName)}`
+                ? "blue"
+                : "black"
+            }
+            fontWeight={
+              location.pathname ===
+              `/tasks/${board._id}/${encodeURIComponent(board.boardName)}`
+                ? "bold"
+                : "normal"
+            }
+          >
             <Flex
               my={4}
               p={2}
@@ -90,6 +110,12 @@ export default function Sidebar() {
                   as={IconButton}
                   icon={<FaEllipsisH />}
                   variant={"ghost"}
+                  color={
+                    location.pathname ===
+                    `/tasks/${board._id}/${encodeURIComponent(board.boardName)}`
+                      ? "blue"
+                      : "black"
+                  }
                 />
                 <MenuList>
                   <MenuItem>

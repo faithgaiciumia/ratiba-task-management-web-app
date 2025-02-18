@@ -28,7 +28,7 @@ export default function NewTaskForm({ boardID }) {
   const onSubmit = (data) => {
     console.log(data);
     addTask({
-      taskTitle: data.taskTitle,
+      taskName: data.taskTitle,
       taskDescription: data.taskDescription,
       taskSubTasks: data.taskSubTasks,
       taskStatus: data.taskStatus,

@@ -26,8 +26,16 @@ import useTaskStore from "../data/useTaskStore";
 import { FaCalendar, FaEllipsisH, FaPlus, FaTrash } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
+import { useEffect } from "react";
 export default function Sidebar() {
+  //get all boards
+  const fetchBoards = useTaskStore((state) => state.fetchBoards);
   const boards = useTaskStore((state) => state.boards);
+  useEffect(() => {
+    fetchBoards();
+  }, [fetchBoards]);
+
+  //add a new board
   const addBoard = useTaskStore((state) => state.addBoard);
   const { handleSubmit, register } = useForm();
   const onSubmit = (data) => {

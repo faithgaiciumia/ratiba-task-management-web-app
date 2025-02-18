@@ -2,7 +2,7 @@ import { create } from "zustand";
 import axios from "axios";
 
 const URL = "http://localhost:4000/graphql";
-const useTaskStore = create((set, get) => ({
+const useTaskStore = create((set) => ({
   boards: [],
   fetchBoards: async () => {
     try {
@@ -10,23 +10,12 @@ const useTaskStore = create((set, get) => ({
         URL,
         {
           query: `
-          query {
-            getBoards {
-              id
+          query GetBoards {
+              getBoards {
               boardName
-              boardTasks {
-                id
-                taskName
-                taskStatus
-                taskDescription
-                taskSubTasks {
-                  id
-                  name
-                }
-              }
+              _id
             }
-          }
-        `,
+          }`,
         },
         {
           headers: {
@@ -47,14 +36,70 @@ const useTaskStore = create((set, get) => ({
       return { boards: updatedBoards };
     }),
   tasks: [],
-  addTask: (newTask) =>
-    set((state) => {
-      const updatedTasks = [...state.tasks, newTask];
-      localStorage.setItem("tasks", JSON.stringify(updatedTasks)); // Save to local storage
-      return { tasks: updatedTasks };
-    }),
-  getTaskByBoardId: (boardID) => {
-    return get().tasks.filter((task) => task.boardID === boardID);
+  addTask: async (newTask) => {
+    try {
+      const response = await axios.post(
+        URL,
+        {
+          query: `mutation AddTask($record: CreateOneTaskInput!) {
+                    addTask(record: $record) {
+                      record {
+                        boardID
+                        taskName
+                        taskDescription
+                        taskStatus
+                        _id
+                        taskSubTasks {
+                          name
+                        }
+                      }
+                    }
+                  }`,
+          variables: {
+            input: newTask,
+          },
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("added task", response.data);
+    } catch (error) {
+      console.error("error adding new task", error);
+    }
+  },
+
+  getBoardTasks: async () => {
+    try {
+      const response = await axios.post(
+        URL,
+        {
+          query: `query GetBoardTasks {
+  getBoardTasks {
+    taskName
+    boardID
+    taskDescription
+    taskStatus
+    taskSubTasks {
+      name
+    }
+    _id
+  }
+}`,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("tasks", response.data);
+      set({ tasks: response.data.data.getBoardTasks });
+    } catch (error) {
+      console.error("error fetching tasks", error);
+    }
   },
   clearTasks: () =>
     set(() => {

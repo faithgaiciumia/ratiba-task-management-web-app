@@ -9,7 +9,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/tasks/:boardID/:boardName" element={<Tasks />} />
+          <Route path="/tasks/:id/:boardName" element={<Tasks />} />
         </Routes>
       </Router>
     </ChakraProvider>

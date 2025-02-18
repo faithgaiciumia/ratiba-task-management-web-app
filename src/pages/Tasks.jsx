@@ -1,4 +1,4 @@
-import { Box,  Flex } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import TopNav from "../components/TopNav";
 import Sidebar from "../components/Sidebar";
 import { useParams } from "react-router-dom";
@@ -6,11 +6,16 @@ import useTaskStore from "../data/useTaskStore";
 import TodoCategoryView from "../components/TodoCategoryView";
 import DoingCategoryView from "../components/DoingCategoryView";
 import DoneCategoryView from "../components/DoneCategoryView";
+import { useEffect } from "react";
 export default function Tasks() {
-  const { boardID, boardName } = useParams();
-  const getTasks = useTaskStore((state) => state.getTaskByBoardId);
-  const tasks = getTasks(boardID);
-  const todoTasks = tasks.filter((task) => task.taskStatus === "todo");
+  const { id, boardName } = useParams();
+  const getBoardTasks = useTaskStore((state) => state.getBoardTasks);
+  useEffect(() => {
+    getBoardTasks();
+  }, [getBoardTasks]);
+  const tasks = useTaskStore((state) => state.tasks);
+
+  const todoTasks = tasks.filter((task) => task.taskStatus === "TODO");
   const doneTasks = tasks.filter((task) => task.taskStatus === "done");
   const doingTasks = tasks.filter((task) => task.taskStatus === "doing");
 
@@ -19,9 +24,9 @@ export default function Tasks() {
       <Flex>
         <Sidebar />
         <Box w={"100%"}>
-          <TopNav boardName={boardName} boardID={boardID} />
+          <TopNav boardName={boardName} boardID={id} />
           <Flex gap={6} my={4} p={4} overflowX={"auto"}>
-            <TodoCategoryView todoTasks={todoTasks} />            
+            <TodoCategoryView todoTasks={todoTasks} />
             <DoingCategoryView doingTasks={doingTasks} />
             <DoneCategoryView doneTasks={doneTasks} />
           </Flex>

@@ -34,7 +34,7 @@ export default function Sidebar() {
   //get all boards
   const fetchBoards = useTaskStore((state) => state.fetchBoards);
   const boards = useTaskStore((state) => state.boards);
-  const loadingBoards = useTaskStore((state)=>state.loadingBoards);
+  const loadingBoards = useTaskStore((state) => state.loadingBoards);
   useEffect(() => {
     fetchBoards();
   }, [fetchBoards]);
@@ -75,7 +75,6 @@ export default function Sidebar() {
       h={"100%"}
       display={{ base: "none", md: "block" }}
     >
-      
       <Button
         fontSize={"lg"}
         fontFamily={"Monomakh, serif"}
@@ -87,7 +86,6 @@ export default function Sidebar() {
       </Button>
       <Divider borderColor={"gray.500"} my={4} w={"100%"} />
       <Box my={12}>
-      
         <Heading
           fontSize={"sm"}
           textTransform={"capitalize"}
@@ -97,7 +95,11 @@ export default function Sidebar() {
         </Heading>
         <Divider borderColor={"gray.500"} my={2} />
         <Box maxH={"60vh"} overflowY={"auto"}>
-        {loadingBoards&&(<Spinner size={"lg"} color={"blue"}/>)}
+          {loadingBoards && (
+            <Flex align={"center"} justify={"center"}>
+              <Spinner size={"lg"} color={"blue"} />
+            </Flex>
+          )}
           {boards.map((board) => (
             <Link
               key={board._id}

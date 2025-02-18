@@ -7,7 +7,7 @@ import { useEffect } from "react";
 export default function Home() {
   //get all boards
   const fetchBoards = useTaskStore((state) => state.fetchBoards);
-  const loadingBoards = useTaskStore((state)=>state.loadingBoards);
+  const loadingBoards = useTaskStore((state) => state.loadingBoards);
   const boards = useTaskStore((state) => state.boards);
   useEffect(() => {
     fetchBoards();
@@ -44,7 +44,7 @@ export default function Home() {
             </Heading>
           </Flex>
           <Flex p={4} gap={6} flexWrap={"wrap"}>
-            {loadingBoards&&(<Spinner size={"lg"} color={"blue"}/>)}
+            {loadingBoards && <Spinner size={"lg"} color={"blue"} />}
             {boards.map((board) => (
               <Box
                 key={board.id}
@@ -56,6 +56,9 @@ export default function Home() {
                 onClick={() =>
                   navigate(`/tasks/${board._id}/${board.boardName}`)
                 }
+                cursor={"pointer"}
+                transition={"transform 0.2s ease-in-out"}
+                _hover={{ transform: "scale(1.1)", boxShadow: "xl" }}
               >
                 <Text
                   fontFamily={"'Atkinson Hyperlegible Mono', serif"}

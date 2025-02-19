@@ -80,6 +80,7 @@ const useTaskStore = create((set) => ({
                         _id
                         taskSubTasks {
                           name
+                          status
                         }
                       }
                     }
@@ -115,6 +116,7 @@ const useTaskStore = create((set) => ({
     taskStatus
     taskSubTasks {
       name
+      status
     }
     _id
   }

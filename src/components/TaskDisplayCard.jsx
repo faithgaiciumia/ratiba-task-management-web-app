@@ -16,9 +16,23 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
+import { useForm } from "react-hook-form";
 
-export default function TaskDisplayCard({ taskTitle, subTasks }) {
+export default function TaskDisplayCard({
+  taskTitle,
+  subTasks,
+  taskDescription,
+  status,
+}) {
   const { onOpen, isOpen, onClose } = useDisclosure();
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      taskStatus: status,
+    },
+  });
+  const doneSubTasks = subTasks.filter(
+    (subTask) => subTask.status === "completed"
+  );
   return (
     <Box
       backgroundColor={"white"}
@@ -40,33 +54,32 @@ export default function TaskDisplayCard({ taskTitle, subTasks }) {
           {taskTitle}
         </Heading>
         <Text fontSize={"sm"} my={2}>
-          0 of {subTasks.length} subtasks
+          {doneSubTasks.length} of {subTasks.length} subtasks
         </Text>
       </Box>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Task Name</ModalHeader>
+          <ModalHeader>{taskTitle}</ModalHeader>
           <ModalCloseButton variant={"ghost"} />
           <ModalBody>
-            <Text my={4}>Description</Text>
             <Heading fontSize={"md"} mb={2}>
-              Subtasks (2 of 3)
+              Description
+            </Heading>
+            <Text my={4}>{taskDescription}</Text>
+            <Heading fontSize={"md"} mb={2}>
+              Subtasks ({doneSubTasks.length} of {subTasks.length})
             </Heading>
             <VStack gap={6}>
-              <Box w={"100%"}>
-                <Checkbox>Subtask 1</Checkbox>
-              </Box>
-              <Box w={"100%"}>
-                <Checkbox>Subtask 1</Checkbox>
-              </Box>
-              <Box w={"100%"}>
-                <Checkbox>Subtask 1</Checkbox>
-              </Box>
+              {subTasks.map((subTask) => (
+                <Box w={"100%"} key={subTask.name}>
+                  <Checkbox>{subTask.name}</Checkbox>
+                </Box>
+              ))}
             </VStack>
             <FormControl my={4}>
               <FormLabel fontSize={"md"}>Status</FormLabel>
-              <Select>
+              <Select {...register("taskStatus")}>
                 <option value={"TODO"}>Todo</option>
                 <option value={"doing"}>Doing</option>
                 <option value={"done"}>Done</option>

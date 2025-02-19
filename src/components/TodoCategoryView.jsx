@@ -20,6 +20,8 @@ export default function TodoCategoryView({ todoTasks }) {
             key={task._id}
             taskTitle={task.taskName}
             subTasks={task.taskSubTasks}
+            status={task.taskStatus}
+            taskDescription={task.taskDescription}
           />
         ))}
       </VStack>

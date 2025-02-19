@@ -1,6 +1,9 @@
 /* eslint-disable react/prop-types */
 import {
   Box,
+  Checkbox,
+  FormControl,
+  FormLabel,
   Heading,
   Modal,
   ModalBody,
@@ -8,8 +11,10 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Select,
   Text,
   useDisclosure,
+  VStack,
 } from "@chakra-ui/react";
 
 export default function TaskDisplayCard({ taskTitle, subTasks }) {
@@ -44,7 +49,29 @@ export default function TaskDisplayCard({ taskTitle, subTasks }) {
           <ModalHeader>Task Name</ModalHeader>
           <ModalCloseButton variant={"ghost"} />
           <ModalBody>
-            <Text>Description</Text>
+            <Text my={4}>Description</Text>
+            <Heading fontSize={"md"} mb={2}>
+              Subtasks (2 of 3)
+            </Heading>
+            <VStack gap={6}>
+              <Box w={"100%"}>
+                <Checkbox>Subtask 1</Checkbox>
+              </Box>
+              <Box w={"100%"}>
+                <Checkbox>Subtask 1</Checkbox>
+              </Box>
+              <Box w={"100%"}>
+                <Checkbox>Subtask 1</Checkbox>
+              </Box>
+            </VStack>
+            <FormControl my={4}>
+              <FormLabel fontSize={"md"}>Status</FormLabel>
+              <Select>
+                <option value={"TODO"}>Todo</option>
+                <option value={"doing"}>Doing</option>
+                <option value={"done"}>Done</option>
+              </Select>
+            </FormControl>
           </ModalBody>
         </ModalContent>
       </Modal>

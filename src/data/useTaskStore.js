@@ -168,6 +168,30 @@ const useTaskStore = create((set) => ({
       set({ loadingTasks: false });
     }
   },
+  deleteBoard: async (boardId) => {
+    try {
+      const response = await axios.post(
+        URL,
+        {
+          query: `mutation Mutation($boardId: ID!) {
+  deleteBoard(boardID: $boardId)
+}`,
+          variables: {
+            boardId: boardId,
+          },
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("deleted task", response.data);
+      return response.data.data.deleteBoard;
+    } catch (error) {
+      console.error(error);
+    }
+  },
   clearTasks: () =>
     set(() => {
       localStorage.removeItem("tasks");

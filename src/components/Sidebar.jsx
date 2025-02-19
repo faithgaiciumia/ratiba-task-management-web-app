@@ -22,11 +22,11 @@ import {
   Link,
   useDisclosure,
   Spinner,
+  useToast,
 } from "@chakra-ui/react";
 import useTaskStore from "../data/useTaskStore";
 import {
-  FaCalendar,
-  FaCheck,
+  FaCalendar,  
   FaEdit,
   FaEllipsisH,
   FaPlus,
@@ -39,6 +39,7 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 export default function Sidebar() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const toast = useToast();
   //get all boards
   const fetchBoards = useTaskStore((state) => state.fetchBoards);
   const boards = useTaskStore((state) => state.boards);
@@ -56,6 +57,22 @@ export default function Sidebar() {
     if (updatedBoard) {
       setEditingBoardId(null);
       await fetchBoards();
+    }
+  };
+
+  //delete board
+  const deleteBoard = useTaskStore((state) => state.deleteBoard);
+  const handleDelete = async (boardId) => {
+    const deleteRes = await deleteBoard(boardId);
+    if (deleteRes) {
+      toast({
+        title: "Board Deleted.",
+        status: "success",
+        duration: 6000,
+        isClosable: true,
+      });
+      await fetchBoards();
+      navigate("/");
     }
   };
 
@@ -80,6 +97,8 @@ export default function Sidebar() {
       onClose();
     }
   };
+
+  //functions for modal opening and closing
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   //manage active and inactive links
@@ -121,29 +140,36 @@ export default function Sidebar() {
             </Flex>
           )}
           {boards.map((board) => (
-            <Link
+            <Flex
               key={board._id}
-              as={NavLink}
-              to={`/tasks/${board._id}/${encodeURIComponent(board.boardName)}`}
-              color={
-                location.pathname ===
-                `/tasks/${board._id}/${encodeURIComponent(board.boardName)}`
-                  ? "blue"
-                  : "black"
-              }
-              fontWeight={
-                location.pathname ===
-                `/tasks/${board._id}/${encodeURIComponent(board.boardName)}`
-                  ? "bold"
-                  : "normal"
-              }
+              align={"center"}
+              justify={"space-between"}
+              gap={4}
             >
-              <Flex
-                my={4}
-                p={2}
-                borderRightRadius={"3xl"}
-                align={"center"}
-                justify={"space-between"}
+              <Link
+                as={NavLink}
+                py={4}
+                w={"70%"}
+                borderRadius={"lg"}
+                to={`/tasks/${board._id}/${encodeURIComponent(
+                  board.boardName
+                )}`}
+                color={
+                  location.pathname ===
+                  `/tasks/${board._id}/${encodeURIComponent(board.boardName)}`
+                    ? "blue"
+                    : "black"
+                }
+                fontWeight={
+                  location.pathname ===
+                  `/tasks/${board._id}/${encodeURIComponent(board.boardName)}`
+                    ? "bold"
+                    : "normal"
+                }
+                _hover={{
+                  backgroundColor: "gray.100",
+                  textDecoration: "underline",
+                }}
               >
                 {editingBoardId === board._id ? (
                   <form
@@ -180,48 +206,48 @@ export default function Sidebar() {
                     {board.boardName}
                   </Text>
                 )}
-
-                {editingBoardId === null && (
-                  <Menu>
-                    <MenuButton
-                      as={IconButton}
-                      icon={<FaEllipsisH />}
-                      variant={"ghost"}
-                      color={
-                        location.pathname ===
-                        `/tasks/${board._id}/${encodeURIComponent(
-                          board.boardName
-                        )}`
-                          ? "blue"
-                          : "black"
-                      }
-                    />
-                    <MenuList>
-                      <MenuItem>
-                        <Button
-                          w={"100%"}
-                          onClick={() => setEditingBoardId(board._id)}
-                          colorScheme="purple"
-                          leftIcon={<FaEdit/>}
-                        >
-                          Rename
-                        </Button>
-                      </MenuItem>
-                      <MenuItem>
-                        <Button
-                          colorScheme="red"
-                          leftIcon={<FaTrash />}
-                          w={"100%"}
-                          size={"sm"}
-                        >
-                          Delete Board
-                        </Button>
-                      </MenuItem>
-                    </MenuList>
-                  </Menu>
-                )}
-              </Flex>
-            </Link>
+              </Link>
+              {editingBoardId === null && (
+                <Menu>
+                  <MenuButton
+                    as={IconButton}
+                    icon={<FaEllipsisH />}
+                    variant={"ghost"}
+                    color={
+                      location.pathname ===
+                      `/tasks/${board._id}/${encodeURIComponent(
+                        board.boardName
+                      )}`
+                        ? "blue"
+                        : "black"
+                    }
+                  />
+                  <MenuList>
+                    <MenuItem>
+                      <Button
+                        w={"100%"}
+                        onClick={() => setEditingBoardId(board._id)}
+                        colorScheme="purple"
+                        leftIcon={<FaEdit />}
+                      >
+                        Rename
+                      </Button>
+                    </MenuItem>
+                    <MenuItem>
+                      <Button
+                        colorScheme="red"
+                        leftIcon={<FaTrash />}
+                        w={"100%"}
+                        size={"sm"}
+                        onClick={() => handleDelete(board._id)}
+                      >
+                        Delete Board
+                      </Button>
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+              )}
+            </Flex>
           ))}
         </Box>
         <Button

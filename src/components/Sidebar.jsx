@@ -39,6 +39,9 @@ export default function Sidebar() {
     fetchBoards();
   }, [fetchBoards]);
 
+  //update board - rename
+  const updateBoard = useTaskStore((state) => state.updateBoard);
+
   //add a new board and navigate to its new page
   const addBoard = useTaskStore((state) => state.addBoard);
   const { handleSubmit, register } = useForm();
@@ -146,6 +149,14 @@ export default function Sidebar() {
                     }
                   />
                   <MenuList>
+                    <MenuItem>
+                      <Button
+                        w={"100%"}
+                        onClick={() => updateBoard(board._id, "New board side")}
+                      >
+                        Rename
+                      </Button>
+                    </MenuItem>
                     <MenuItem>
                       <Button
                         colorScheme="red"

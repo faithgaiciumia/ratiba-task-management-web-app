@@ -62,6 +62,38 @@ const useTaskStore = create((set) => ({
       console.error("error adding board", error);
     }
   },
+  updateBoard: async (boardId, newBoardName) => {
+    try {
+      const response = await axios.post(
+        URL,
+        {
+          query: `mutation UpdateBoard($id: MongoID!, $record: UpdateByIdBoardInput!) {
+  updateBoard(_id: $id, record: $record) {
+    recordId
+    record {
+      boardName
+    }
+  }
+}`,
+          variables: {
+            id: boardId,
+            record: {
+              boardName: newBoardName,
+            },
+          },
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("updated board", response.data.data.updateBoard);
+      return response.data.data.updateBoard;
+    } catch (error) {
+      console.error("error updating board", error);
+    }
+  },
 
   tasks: [],
   loadingTasks: false,

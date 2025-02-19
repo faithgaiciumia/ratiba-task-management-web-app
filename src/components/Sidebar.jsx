@@ -27,6 +27,7 @@ import useTaskStore from "../data/useTaskStore";
 import {
   FaCalendar,
   FaCheck,
+  FaEdit,
   FaEllipsisH,
   FaPlus,
   FaTimes,
@@ -49,9 +50,13 @@ export default function Sidebar() {
   //update board - rename
   const [editingBoardId, setEditingBoardId] = useState(null);
   const updateBoard = useTaskStore((state) => state.updateBoard);
-  const handleRename = (data) => {
+  const handleRename = async (data) => {
     const boardId = editingBoardId;
-    console.log("hello", data, boardId);
+    const updatedBoard = await updateBoard(boardId, data.boardName);
+    if (updatedBoard) {
+      setEditingBoardId(null);
+      await fetchBoards();
+    }
   };
 
   //add a new board and navigate to its new page
@@ -141,30 +146,31 @@ export default function Sidebar() {
                 justify={"space-between"}
               >
                 {editingBoardId === board._id ? (
-                  <form onSubmit={handleSubmit(handleRename)}>
+                  <form
+                    onSubmit={handleSubmit(handleRename)}
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
                     <Input
                       defaultValue={board.boardName}
                       autoFocus
                       {...register("boardName")}
-                      onKeyDown={(e) =>
-                        e.key === "Enter" && handleSubmit(handleRename)
-                      }
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          handleSubmit(handleRename)();
+                        }
+                      }}
                     />
-                    <Flex my={2} justify={"end"} align={"center"}>
-                      <IconButton
-                        icon={<FaCheck />}
-                        size={"sm"}
-                        colorScheme="green"
-                        type="submit"
-                        mx={2}
-                        onClick={()=>handleSubmit(handleRename())}
-                      />
-                      <IconButton
-                        icon={<FaTimes />}
-                        size={"sm"}
-                        onClick={() => setEditingBoardId(null)}
-                      />
-                    </Flex>
+                    <IconButton
+                      icon={<FaTimes />}
+                      size={"sm"}
+                      onClick={() => setEditingBoardId(null)}
+                      ml={2}
+                    />
                   </form>
                 ) : (
                   <Text
@@ -195,6 +201,8 @@ export default function Sidebar() {
                         <Button
                           w={"100%"}
                           onClick={() => setEditingBoardId(board._id)}
+                          colorScheme="purple"
+                          leftIcon={<FaEdit/>}
                         >
                           Rename
                         </Button>

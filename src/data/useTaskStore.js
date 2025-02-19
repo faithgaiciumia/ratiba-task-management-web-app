@@ -97,6 +97,8 @@ const useTaskStore = create((set) => ({
 
   tasks: [],
   loadingTasks: false,
+  taskAdded: false,
+  setTaskAdded: (value) => set({ taskAdded: value }),
   addTask: async (newTask) => {
     try {
       const response = await axios.post(

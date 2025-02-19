@@ -26,6 +26,7 @@ export default function NewTaskForm({ boardID, onClose }) {
     name: "taskSubTasks",
   });
   const addTask = useTaskStore((state) => state.addTask);
+  const setTaskAdded = useTaskStore((state) => state.setTaskAdded);
 
   const [loading, setLoading] = useState();
 
@@ -48,6 +49,7 @@ export default function NewTaskForm({ boardID, onClose }) {
           duration: 9000,
           isClosable: true,
         });
+        setTaskAdded(true);
         onClose();
       }
     } catch (error) {

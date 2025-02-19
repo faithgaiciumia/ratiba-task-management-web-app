@@ -24,7 +24,14 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import useTaskStore from "../data/useTaskStore";
-import { FaCalendar, FaEllipsisH, FaPlus, FaTrash } from "react-icons/fa";
+import {
+  FaCalendar,
+  FaCheck,
+  FaEllipsisH,
+  FaPlus,
+  FaTimes,
+  FaTrash,
+} from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
@@ -40,7 +47,12 @@ export default function Sidebar() {
   }, [fetchBoards]);
 
   //update board - rename
+  const [editingBoardId, setEditingBoardId] = useState(null);
   const updateBoard = useTaskStore((state) => state.updateBoard);
+  const handleRename = (data) => {
+    const boardId = editingBoardId;
+    console.log("hello", data, boardId);
+  };
 
   //add a new board and navigate to its new page
   const addBoard = useTaskStore((state) => state.addBoard);
@@ -128,47 +140,78 @@ export default function Sidebar() {
                 align={"center"}
                 justify={"space-between"}
               >
-                <Text
-                  textTransform={"capitalize"}
-                  fontFamily={"'Atkinson Hyperlegible Mono', serif"}
-                >
-                  {board.boardName}
-                </Text>{" "}
-                <Menu>
-                  <MenuButton
-                    as={IconButton}
-                    icon={<FaEllipsisH />}
-                    variant={"ghost"}
-                    color={
-                      location.pathname ===
-                      `/tasks/${board._id}/${encodeURIComponent(
-                        board.boardName
-                      )}`
-                        ? "blue"
-                        : "black"
-                    }
-                  />
-                  <MenuList>
-                    <MenuItem>
-                      <Button
-                        w={"100%"}
-                        onClick={() => updateBoard(board._id, "New board side")}
-                      >
-                        Rename
-                      </Button>
-                    </MenuItem>
-                    <MenuItem>
-                      <Button
-                        colorScheme="red"
-                        leftIcon={<FaTrash />}
-                        w={"100%"}
+                {editingBoardId === board._id ? (
+                  <form onSubmit={handleSubmit(handleRename)}>
+                    <Input
+                      defaultValue={board.boardName}
+                      autoFocus
+                      {...register("boardName")}
+                      onKeyDown={(e) =>
+                        e.key === "Enter" && handleSubmit(handleRename)
+                      }
+                    />
+                    <Flex my={2} justify={"end"} align={"center"}>
+                      <IconButton
+                        icon={<FaCheck />}
                         size={"sm"}
-                      >
-                        Delete Board
-                      </Button>
-                    </MenuItem>
-                  </MenuList>
-                </Menu>
+                        colorScheme="green"
+                        type="submit"
+                        mx={2}
+                        onClick={()=>handleSubmit(handleRename())}
+                      />
+                      <IconButton
+                        icon={<FaTimes />}
+                        size={"sm"}
+                        onClick={() => setEditingBoardId(null)}
+                      />
+                    </Flex>
+                  </form>
+                ) : (
+                  <Text
+                    textTransform={"capitalize"}
+                    fontFamily={"'Atkinson Hyperlegible Mono', serif"}
+                  >
+                    {board.boardName}
+                  </Text>
+                )}
+
+                {editingBoardId === null && (
+                  <Menu>
+                    <MenuButton
+                      as={IconButton}
+                      icon={<FaEllipsisH />}
+                      variant={"ghost"}
+                      color={
+                        location.pathname ===
+                        `/tasks/${board._id}/${encodeURIComponent(
+                          board.boardName
+                        )}`
+                          ? "blue"
+                          : "black"
+                      }
+                    />
+                    <MenuList>
+                      <MenuItem>
+                        <Button
+                          w={"100%"}
+                          onClick={() => setEditingBoardId(board._id)}
+                        >
+                          Rename
+                        </Button>
+                      </MenuItem>
+                      <MenuItem>
+                        <Button
+                          colorScheme="red"
+                          leftIcon={<FaTrash />}
+                          w={"100%"}
+                          size={"sm"}
+                        >
+                          Delete Board
+                        </Button>
+                      </MenuItem>
+                    </MenuList>
+                  </Menu>
+                )}
               </Flex>
             </Link>
           ))}

@@ -17,7 +17,7 @@ export default function Home() {
     <Box backgroundColor={"blue.100"} minH={"100vh"}>
       <Flex>
         <Sidebar />
-        <Box w={"75%"}>
+        <Box w={{ base: "100%", md: "75%" }}>
           <Box
             backgroundColor={"white"}
             p={4}

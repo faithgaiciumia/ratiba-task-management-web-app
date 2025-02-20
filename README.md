@@ -37,23 +37,23 @@
 
 Here are some previews of the **Ratiba Task Management App**:
 
-### 🏠 Dashboard View
+### Board View
 
 ![Dashboard](https://github.com/faithgaiciumia/ratiba-task-management-web-app/blob/Main/public/screenshots/sc1.png)
 
-### 📌 Task Board
+### Add New Board Form
 
 ![Task Board](https://github.com/faithgaiciumia/ratiba-task-management-web-app/blob/Main/public/screenshots/sc2.png)
 
-### ✍️ Editing Tasks
+### Add New Task
 
 ![Editing Tasks](https://github.com/faithgaiciumia/ratiba-task-management-web-app/blob/Main/public/screenshots/sc3.png)
 
-### 📑 Subtasks View
+### Board Tasks View
 
 ![Subtasks](https://github.com/faithgaiciumia/ratiba-task-management-web-app/blob/Main/public/screenshots/sc4.png)
 
-### 🎨 Responsive UI
+### Task Details and Edit
 
 ![Mobile View](https://github.com/faithgaiciumia/ratiba-task-management-web-app/blob/Main/public/screenshots/sc5.png)
 

@@ -1,6 +1,6 @@
 # 📌 Ratiba Task Management App
 
-**Ratiba** is a **full-stack task management web app** that allows users to manage their workflow with **boards, tasks, and sub-tasks**. 
+**Ratiba** is a **full-stack task management web app** that allows users to manage their workflow with **boards, tasks, and sub-tasks**.
 
 ## 🔧 Built With
 
@@ -34,6 +34,28 @@
 ---
 
 ## 📸 Screenshots
+
+Here are some previews of the **Ratiba Task Management App**:
+
+### 🏠 Dashboard View
+
+![Dashboard](https://github.com/faithgaiciumia/ratiba-task-management-web-app/blob/Main/public/screenshots/sc1.png)
+
+### 📌 Task Board
+
+![Task Board](https://github.com/faithgaiciumia/ratiba-task-management-web-app/blob/Main/public/screenshots/sc2.png)
+
+### ✍️ Editing Tasks
+
+![Editing Tasks](https://github.com/faithgaiciumia/ratiba-task-management-web-app/blob/Main/public/screenshots/sc3.png)
+
+### 📑 Subtasks View
+
+![Subtasks](https://github.com/faithgaiciumia/ratiba-task-management-web-app/blob/Main/public/screenshots/sc4.png)
+
+### 🎨 Responsive UI
+
+![Mobile View](https://github.com/faithgaiciumia/ratiba-task-management-web-app/blob/Main/public/screenshots/sc5.png)
 
 ## ✅ To-Do List
 

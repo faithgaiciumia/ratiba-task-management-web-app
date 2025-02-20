@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
 
-const URL = "http://localhost:4000/graphql";
+const URL = "https://ratiba-back.onrender.com/graphql";
 const useTaskStore = create((set) => ({
   loadingBoards: false,
   boards: [],

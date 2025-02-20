@@ -18,12 +18,17 @@ export default function Tasks() {
   const tasks = useTaskStore((state) => state.tasks);
   const taskAdded = useTaskStore((state) => state.taskAdded);
   const setTaskAdded = useTaskStore((state) => state.setTaskAdded);
+  const taskEdited = useTaskStore((state) => state.taskEdited);
+  const setTaskEdited = useTaskStore((state) => state.setTaskEdited);
   useEffect(() => {
     getBoardTasks();
     if (taskAdded) {
       setTaskAdded(false);
     }
-  }, [getBoardTasks, setTaskAdded, taskAdded]);
+    if (taskEdited) {
+      setTaskEdited(false);
+    }
+  }, [getBoardTasks, setTaskAdded, taskAdded, taskEdited, setTaskEdited]);
 
   //filter only for a single board
   const currentBoardTasks = tasks.filter((task) => task.boardID === id);

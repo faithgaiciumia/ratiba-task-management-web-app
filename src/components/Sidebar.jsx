@@ -26,7 +26,7 @@ import {
 } from "@chakra-ui/react";
 import useTaskStore from "../data/useTaskStore";
 import {
-  FaCalendar,  
+  FaCalendar,
   FaEdit,
   FaEllipsisH,
   FaPlus,
@@ -120,6 +120,7 @@ export default function Sidebar() {
         variant={"ghost"}
         leftIcon={<FaCalendar />}
         onClick={() => navigate("/")}
+        colorScheme="blue"
       >
         ratiba
       </Button>

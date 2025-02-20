@@ -94,11 +94,38 @@ const useTaskStore = create((set) => ({
       console.error("error updating board", error);
     }
   },
+  deleteBoard: async (boardId) => {
+    try {
+      const response = await axios.post(
+        URL,
+        {
+          query: `mutation Mutation($boardId: ID!) {
+  deleteBoard(boardID: $boardId)
+}`,
+          variables: {
+            boardId: boardId,
+          },
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("deleted task", response.data);
+      return response.data.data.deleteBoard;
+    } catch (error) {
+      console.error(error);
+    }
+  },
 
+  //tasks
   tasks: [],
   loadingTasks: false,
   taskAdded: false,
   setTaskAdded: (value) => set({ taskAdded: value }),
+  taskEdited: false,
+  setTaskEdited: (value) => set({ taskEdited: value }),
   addTask: async (newTask) => {
     try {
       const response = await axios.post(
@@ -170,16 +197,20 @@ const useTaskStore = create((set) => ({
       set({ loadingTasks: false });
     }
   },
-  deleteBoard: async (boardId) => {
+  updateTask: async (updatedTask) => {
     try {
       const response = await axios.post(
         URL,
         {
-          query: `mutation Mutation($boardId: ID!) {
-  deleteBoard(boardID: $boardId)
-}`,
+          query: `
+          mutation Mutation($taskId: ID!, $taskName: String, $taskDescription: String, $taskStatus: String) {
+  updateTask(taskID: $taskId, taskName: $taskName, taskDescription: $taskDescription, taskStatus: $taskStatus) {
+    _id}}`,
           variables: {
-            boardId: boardId,
+            taskId: updatedTask.taskID,
+            taskName: updatedTask.taskName,
+            taskDescription: updatedTask.taskDescription,
+            taskStatus: updatedTask.taskStatus,
           },
         },
         {
@@ -188,12 +219,13 @@ const useTaskStore = create((set) => ({
           },
         }
       );
-      console.log("deleted task", response.data);
-      return response.data.data.deleteBoard;
+      console.log("updated task", response.data.data.updateTask);
+      return response.data.data.updateTask;
     } catch (error) {
-      console.error(error);
+      console.log("error updating task", error);
     }
   },
+
   clearTasks: () =>
     set(() => {
       localStorage.removeItem("tasks");

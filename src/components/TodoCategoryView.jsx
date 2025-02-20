@@ -18,6 +18,7 @@ export default function TodoCategoryView({ todoTasks }) {
         {todoTasks.map((task) => (
           <TaskDisplayCard
             key={task._id}
+            taskID={task._id}
             taskTitle={task.taskName}
             subTasks={task.taskSubTasks}
             status={task.taskStatus}
